@@ -15,6 +15,10 @@ SECRET_KEY = 'django-insecure-!%t7t^m4i-g47w7_14c2$@47=_!14t#bq(a)v-$--oh4u@%^8s
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 ALLOWED_HOSTS = ['leo10.pythonanywhere.com', 'localhost', '127.0.0.1']
+<<<<<<< HEAD
+=======
+
+>>>>>>> a980853437a4b57841116ec5e1dc6327ec991e5c
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
