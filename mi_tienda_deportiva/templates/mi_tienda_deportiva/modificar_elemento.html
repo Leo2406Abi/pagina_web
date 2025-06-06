@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Modificar Elemento</title>
+</head>
+<body>
+    <h1>Modificar Elemento</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label>Tipo:</label>
+        <select name="tipo">
+            <option value="usuario">Usuario</option>
+            <option value="producto">Producto</option>
+            <option value="pedido">Pedido</option>
+            <option value="categoria">Categoría</option>
+            <option value="detalle">Detalle</option>
+        </select><br><br>
+
+        <label>ID:</label>
+        <input type="text" name="id" required><br><br>
+
+        <label>Campo a modificar:</label>
+        <input type="text" name="campo" required><br><br>
+
+        <label>Nuevo valor:</label>
+        <input type="text" name="nuevo_valor" required><br><br>
+
+        <button type="submit">Modificar</button>
+    </form>
+</body>
+</html>

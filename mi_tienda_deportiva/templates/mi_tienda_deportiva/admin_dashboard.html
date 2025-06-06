@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Administración</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e7f1f8;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #0077cc;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        main {
+            padding: 30px;
+        }
+        .acciones {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .acciones form,
+        .acciones a {
+            display: inline-block;
+            background-color: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+            flex: 1 1 30%;
+        }
+        .acciones a:hover {
+            background-color: #f0f0f0;
+        }
+        .logout {
+            text-align: right;
+            padding: 10px;
+        }
+        .logout a {
+            color: #0077cc;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Bienvenido al Panel de Administración</h1>
+</header>
+
+<div class="logout">
+    <a href="{% url 'admin_logout' %}">Cerrar sesión</a>
+</div>
+
+<main>
+    <h2>Acciones disponibles:</h2>
+    <div class="acciones">
+        <a href="{% url 'ver_usuarios' %}">Ver Usuarios</a>
+        <a href="{% url 'ver_productos' %}">Ver Productos</a>
+        <a href="{% url 'ver_pedidos' %}">Ver Pedidos</a>
+        <a href="{% url 'ver_categorias' %}">Ver Categorías</a>
+        <a href="{% url 'ver_detalles' %}">Ver Detalles de Pedido</a>
+        <a href="{% url 'ver_pagos' %}">Ver Pagos</a> <!-- Agregado aquí -->
+    </div>
+
+    <h3 style="margin-top: 40px;">Eliminar elemento</h3>
+    <form action="{% url 'eliminar_elemento' %}" method="get">
+        <label>Tipo:</label>
+        <select name="tipo">
+            <option value="usuario">Usuario</option>
+            <option value="producto">Producto</option>
+            <option value="pedido">Pedido</option>
+            <option value="categoria">Categoria</option>
+            <option value="detalle">Detalle</option>
+            <option value="pago">Pago</option>
+        </select>
+
+        <br>
+        <label>ID o Nombre:</label>
+        <input type="text" name="busqueda">
+        <input type="submit" value="Eliminar">
+    </form>
+
+    <h3 style="margin-top: 30px;">Modificar elemento</h3>
+    <form action="{% url 'modificar_elemento' %}" method="post">
+        {% csrf_token %}
+        <select name="tipo">
+            <option value="usuario">Usuario</option>
+            <option value="producto">Producto</option>
+            <option value="pedido">Pedido</option>
+            <option value="categoria">Categoria</option>
+            <option value="detalle">Detalle</option>
+            <option value="pago">Pago</option>
+        </select>
+
+        <br>
+        <label>ID:</label>
+        <input type="text" name="id" placeholder="ID numérico del elemento">
+        <label>Campo a modificar:</label>
+        <input type="text" name="campo" placeholder="Ej: nombre, precio, estado...">
+        <label>Nuevo valor:</label>
+        <input type="text" name="nuevo_valor">
+        <input type="submit" value="Modificar">
+    </form>
+
+    <h3 style="margin-top: 30px;">Verificar si un elemento existe</h3>
+    <form action="{% url 'verificar_elemento' %}" method="get">
+        <select name="tipo">
+            <option value="usuario">Usuario</option>
+            <option value="producto">Producto</option>
+            <option value="pedido">Pedido</option>
+            <option value="categoria">Categoria</option>
+            <option value="detalle">Detalle</option>
+            <option value="pago">Pago</option>
+        </select>
+        <br>
+        <label>ID o Nombre:</label>
+        <input type="text" name="busqueda">
+        <input type="submit" value="Verificar">
+    </form>
+</main>
+</body>
+</html>

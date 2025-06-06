@@ -1,0 +1,18 @@
+<!-- mi_tienda_deportiva/templates/mi_tienda_deportiva/inicio.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Página de Inicio</title>
+</head>
+<body>
+    <h1>Bienvenido a la Tienda Deportiva</h1>
+
+    <form action="{% url 'login' %}">
+        <button type="submit">Usuario</button>
+    </form>
+
+    <form action="/admin-login/" method="get">
+        <button type="submit">Administrador</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,43 @@
+{% load static %}
+
+<h1>Productos</h1>
+<p>Lista de productos disponibles.</p>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Imagen</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Precio</th>
+            <th>Stock</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for producto in productos %}
+        <tr>
+            <td>{{ producto.producto_id }}</td>
+            <td>
+                {% if producto.imagen %}
+                    <img src="{% static producto.imagen %}" alt="Imagen" width="70">
+                {% else %}
+                    Sin imagen
+                {% endif %}
+            </td>
+            <td>{{ producto.nombre }}</td>
+            <td>{{ producto.descripción }}</td>
+            <td>${{ producto.precio }}</td>
+            <td>{{ producto.cantidad_en_stock }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6">No hay productos disponibles.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'perfil' %}">Volver al perfil</a>
+
+
