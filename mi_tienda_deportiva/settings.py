@@ -75,13 +75,14 @@ WSGI_APPLICATION = 'mi_tienda_deportiva.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bd_tienda_deportiva',  # Cambia esto por el nombre real de tu base en XAMPP
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
+        'NAME': 'Leo10$tienda_deportiva',  # OJO: el nombre lleva el usuario al inicio
+        'USER': 'Leo10',
+        'PASSWORD': 'bebitofuifui',
+        'HOST': 'Leo10.mysql.pythonanywhere-services.com',
         'PORT': '3306',
     }
 }
+
 
 
 # Password validation
