@@ -20,7 +20,7 @@
             <td>{{ producto.producto_id }}</td>
             <td>
                 {% if producto.imagen %}
-                    <img src="{% static producto.imagen %}" alt="Imagen" width="70">
+                    <img src="{% static producto.imagen %}" alt="Imagen de {{ producto.nombre }}" width="70">
                 {% else %}
                     Sin imagen
                 {% endif %}
