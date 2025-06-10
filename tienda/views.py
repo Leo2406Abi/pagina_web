@@ -12,11 +12,6 @@ def detalle_producto(request):
     return render(request, 'tienda/detalle_producto.html')
 
 # --- Añadir al carrito ---
-from django.shortcuts import redirect, render
-from django.contrib import messages
-from tienda.models import Producto
-
-# --- Añadir al carrito ---
 def agregar_carrito(request):
     if request.method == 'POST':
         prod_id = request.POST.get('producto_id')
@@ -88,7 +83,7 @@ def eliminar_del_carrito(request):
 
         request.session["carrito"] = carrito
 
-    return redirect("carrito")
+    return redirect("ver_carrito")
 
 def checkout(request):
     return render(request, 'tienda/checkout.html')
