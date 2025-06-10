@@ -76,6 +76,19 @@ def ver_carrito(request):
         'productos': productos,
         'total': total
     })
+from django.shortcuts import redirect
+
+def eliminar_del_carrito(request):
+    if request.method == "POST":
+        productos_a_eliminar = request.POST.getlist("productos_a_eliminar")
+        carrito = request.session.get("carrito", {})
+
+        for prod_id in productos_a_eliminar:
+            carrito.pop(prod_id, None)
+
+        request.session["carrito"] = carrito
+
+    return redirect("carrito")
 
 def checkout(request):
     return render(request, 'tienda/checkout.html')
