@@ -61,16 +61,15 @@
             {% endfor %}
         </tbody>
     </table>
-
-    {# --- BOTÓN PARA VOLVER AL PERFIL --- #}
+    {% if productos %}
+        <p style="text-align:center;">Total de productos: {{ productos|length }}</p>
+    {% endif %}
+    <br>
     <div class="volver">
         {# Ajusta el nombre de la URL a la que Sí exista en tu urls.py -- por ejemplo 'usuario_perfil' #}
         <a href="{% url 'perfil' %}" class="button">Volver a mi perfil</a>
     </div>
 
-    {% if productos %}
-        <p style="text-align:center;">Total de productos: {{ productos|length }}</p>
-    {% endif %}
 </main>
 </body>
 </html>
