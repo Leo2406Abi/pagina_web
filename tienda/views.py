@@ -71,7 +71,6 @@ def ver_carrito(request):
         'productos': productos,
         'total': total
     })
-from django.shortcuts import redirect
 
 def eliminar_del_carrito(request):
     if request.method == "POST":
