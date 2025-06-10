@@ -1,5 +1,5 @@
 from django.db import connection
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from tienda.models import Producto
 from django.contrib import messages
 
@@ -12,28 +12,26 @@ def detalle_producto(request):
     return render(request, 'tienda/detalle_producto.html')
 
 def agregar_carrito(request):
-    if request.method != "POST":
-        return redirect("pagina_tienda")
-
-    try:
-        prod_id = int(request.POST["producto_id"])
+    if request.method == "POST":
+        prod_id = request.POST.get("producto_id")
         cantidad = int(request.POST.get("cantidad", 1))
-        if cantidad < 1:
-            raise ValueError("Cantidad inválida")
-    except (KeyError, ValueError):
-        messages.error(request, "Datos de formulario incorrectos.")
-        return redirect("pagina_tienda")
 
-    producto = get_object_or_404(Producto, producto_id=prod_id)
+        try:
+            producto = Producto.objects.get(producto_id=prod_id)
+        except Producto.DoesNotExist:
+            return redirect("pagina_tienda")  # O mostrar un mensaje de error
 
-    carrito = request.session.get("carrito", {})
-    prod_id_str = str(prod_id)
-    carrito[prod_id_str] = carrito.get(prod_id_str, 0) + cantidad
-    request.session["carrito"] = carrito
-    messages.success(request, f"{producto.nombre} agregado al carrito.")
-    return redirect("ver_carrito")
+        carrito = request.session.get("carrito", {})
 
+        prod_id_str = str(prod_id)  # ← asegúrate de que sea string
 
+        if prod_id_str in carrito:
+            carrito[prod_id_str] += cantidad
+        else:
+            carrito[prod_id_str] = cantidad
+
+        request.session["carrito"] = carrito
+        return redirect("ver_carrito")
 
 # --- Ver carrito ---
 def ver_carrito(request):
