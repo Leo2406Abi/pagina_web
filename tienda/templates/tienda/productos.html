@@ -45,7 +45,7 @@
                 <td>
                     {% if p.imagen %}
                         {# Si en BD solo guardas "productos/archivo.png" #}
-                        <img src="{% static p.imagen %}" alt="Imagen de {{ p.nombre }}">
+                        <img src="{% static p.imagen %}" alt="Imagen de {{ p.nombre }}" width="100">
                     {% else %}
                         <em>Sin imagen</em>
                     {% endif %}
