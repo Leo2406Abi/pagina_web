@@ -1,6 +1,7 @@
 from django.db import connection
 from django.shortcuts import render
 from tienda.models import Producto
+from django.contrib import messages
 
 def pagina_tienda(request):
     productos = Producto.objects.all()
