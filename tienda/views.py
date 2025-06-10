@@ -72,41 +72,39 @@ def ver_carrito(request):
         'total': total
     })
 
-from django.shortcuts import render
-from .models import Producto
-
 def eliminar_del_carrito(request):
     carrito = request.session.get("carrito", {})
     mensaje = ""
-
     if request.method == "POST":
         productos_a_eliminar = request.POST.getlist("productos_a_eliminar")
-
         if productos_a_eliminar:
             for prod_id in productos_a_eliminar:
-                carrito.pop(prod_id, None)
-            request.session["carrito"] = carrito
+                carrito.pop(prod_id, None)          # quita el ítem del dict
+            request.session["carrito"] = carrito     # guarda el carrito limpio
             mensaje = "Producto(s) eliminado(s) del carrito."
-
-    # Reconstruir productos del carrito actual
+    # Re-construir los datos que el template necesita
     productos = []
     total = 0
-    for prod_id, cantidad in carrito.items():
+    for prod_id, qty in carrito.items():
         try:
-            producto = Producto.objects.get(producto_id=prod_id)
-            subtotal = producto.precio * cantidad
+            p = Producto.objects.get(producto_id=prod_id)
+            subtotal = p.precio * qty
             productos.append({
-                "producto_id": producto.producto_id,
-                "nombre": producto.nombre,
-                "precio": producto.precio,
-                "cant_en_carrito": cantidad,
-                "subtotal": subtotal,
+                "producto_id": p.producto_id,
+                "nombre":      p.nombre,
+                "cant_en_carrito": qty,
+                "precio":      p.precio,
+                "subtotal":    subtotal,
             })
             total += subtotal
         except Producto.DoesNotExist:
             continue
-
-    return render(request, "carrito.html", {"productos": productos, "total": total, "mensaje": mensaje})
+    # ←  usa request y la ruta correcta de plantilla
+    return render(
+        request,
+        "tienda/carrito.html",
+        {"productos": productos, "total": total, "mensaje": mensaje}
+    )
 
 def checkout(request):
     return render(request, 'tienda/checkout.html')
