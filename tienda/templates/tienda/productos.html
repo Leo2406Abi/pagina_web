@@ -28,7 +28,7 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Imagen</th>   {# ← la imagen va aquí para que coincida con el orden de las celdas #}
+                <th>Imagen</th>
                 <th>Nombre</th>
                 <th>Descripción</th>
                 <th>Precio</th>
@@ -41,16 +41,13 @@
             {% for p in productos %}
             <tr>
                 <td>{{ p.producto_id }}</td>
-
                 <td>
                     {% if p.imagen %}
-                        {# Si en BD solo guardas "productos/archivo.png" #}
                         <img src="{% static p.imagen %}" alt="Imagen de {{ p.nombre }}" width="100">
                     {% else %}
-                        <em>Sin imagen</em>
+                        Sin imagen
                     {% endif %}
                 </td>
-
                 <td>{{ p.nombre }}</td>
                 <td>{{ p.descripción }}</td>
                 <td>${{ p.precio }}</td>
