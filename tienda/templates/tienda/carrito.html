@@ -1,2 +1,45 @@
-<h1>Carrito</h1>
-<p>Productos en el carrito.</p>
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi carrito</title>
+    <style>
+        body { font-family:Arial, sans-serif; background:#e7f1f8; margin:0; padding:0; }
+        table{ width:100%; border-collapse:collapse; margin:20px 0; }
+        th,td{ border:1px solid #ccc; padding:10px; text-align:left; }
+        th { background:#0077cc; color:#fff; }
+        .volver{text-align:center; margin:20px;}
+        a.button { padding:8px 16px; background:#0077cc; color:#fff; border-radius:6px; text-decoration:none; }
+    </style>
+</head>
+<body>
+<h1 style="text-align:center;">Carrito de compras</h1>
+
+{% if productos %}
+<table>
+    <thead>
+        <tr><th>ID</th><th>Nombre</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th></tr>
+    </thead>
+    <tbody>
+        {% for p in productos %}
+        <tr>
+            <td>{{ p.producto_id }}</td>
+            <td>{{ p.nombre }}</td>
+            <td>{{ p.cant_en_carrito }}</td>
+            <td>${{ p.precio }}</td>
+            <td>${{ p.subtotal }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<p style="text-align:center;"><strong>Total: ${{ total }}</strong></p>
+{% else %}
+<p style="text-align:center;">Tu carrito está vacío.</p>
+{% endif %}
+
+<div class="volver">
+    <a href="{% url 'pagina_tienda' %}" class="button">Seguir comprando</a>
+</div>
+</body>
+</html>
