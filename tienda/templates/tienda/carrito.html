@@ -11,29 +11,45 @@
         th { background:#0077cc; color:#fff; }
         .volver{text-align:center; margin:20px;}
         a.button { padding:8px 16px; background:#0077cc; color:#fff; border-radius:6px; text-decoration:none; }
+        a.button:hover, button:hover { background:#005fa3; }
+        button { padding:8px 16px; background:#cc0000; color:#fff; border:none; border-radius:6px; cursor:pointer; }
     </style>
 </head>
 <body>
 <h1 style="text-align:center;">Carrito de compras</h1>
 
 {% if productos %}
-<table>
-    <thead>
-        <tr><th>ID</th><th>Nombre</th><th>Cantidad</th><th>Precio</th><th>Subtotal</th></tr>
-    </thead>
-    <tbody>
-        {% for p in productos %}
-        <tr>
-            <td>{{ p.producto_id }}</td>
-            <td>{{ p.nombre }}</td>
-            <td>{{ p.cant_en_carrito }}</td>
-            <td>${{ p.precio }}</td>
-            <td>${{ p.subtotal }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<p style="text-align:center;"><strong>Total: ${{ total }}</strong></p>
+<form method="post" action="{% url 'eliminar_del_carrito' %}">
+    {% csrf_token %}
+    <table>
+        <thead>
+            <tr>
+                <th>Eliminar</th>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in productos %}
+            <tr>
+                <td><input type="checkbox" name="productos_a_eliminar" value="{{ p.producto_id }}"></td>
+                <td>{{ p.producto_id }}</td>
+                <td>{{ p.nombre }}</td>
+                <td>{{ p.cant_en_carrito }}</td>
+                <td>${{ p.precio }}</td>
+                <td>${{ p.subtotal }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p style="text-align:center;"><strong>Total: ${{ total }}</strong></p>
+    <div style="text-align:center; margin: 20px;">
+        <button type="submit">Eliminar seleccionados</button>
+    </div>
+</form>
 {% else %}
 <p style="text-align:center;">Tu carrito está vacío.</p>
 {% endif %}
