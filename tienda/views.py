@@ -35,19 +35,19 @@ def agregar_carrito(request):
 
 # --- Ver carrito ---
 def ver_carrito(request):
-    cart = request.session.get('cart', {})
+    carrito = request.session.get('carrito', {})  # ← corregido aquí
     productos = []
     total = 0
 
-    for prod_id, qty in cart.items():
+    for prod_id, qty in carrito.items():
         try:
-            p = Producto.objects.get(producto_id=int (prod_id))
+            p = Producto.objects.get(producto_id=int(prod_id))
             p.cant_en_carrito = qty
             p.subtotal = p.precio * qty
             total += p.subtotal
             productos.append(p)
         except Producto.DoesNotExist:
-            pass  # producto eliminado de la BD
+            pass
 
     return render(request, 'tienda/carrito.html', {
         'productos': productos,
