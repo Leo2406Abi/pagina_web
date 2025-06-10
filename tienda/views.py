@@ -12,22 +12,28 @@ def detalle_producto(request):
     return render(request, 'tienda/detalle_producto.html')
 
 # --- Añadir al carrito ---
-def agregar_carrito(request):
-    if request.method == 'POST':
-        prod_id = request.POST.get('producto_id')
-        qty     = int(request.POST.get('cantidad', 1))
+ddef agregar_carrito(request):
+    if request.method == "POST":
+        prod_id = request.POST.get("producto_id")
+        cantidad = int(request.POST.get("cantidad", 1))
 
         try:
             producto = Producto.objects.get(producto_id=prod_id)
         except Producto.DoesNotExist:
-            messages.error(request, 'Producto no encontrado.')
-            return redirect('pagina_tienda')
+            return redirect("pagina_tienda")  # O mostrar un mensaje de error
 
-        # Carrito en sesión
-        cart = request.session.get('cart', {})
-        cart[str(prod_id)] = cart.get(str(prod_id), 0) + qty
-        request.session['cart'] = cart
-    return redirect('pagina_tienda')
+        carrito = request.session.get("carrito", {})
+
+        prod_id_str = str(prod_id)  # ← asegúrate de que sea string
+
+        if prod_id_str in carrito:
+            carrito[prod_id_str] += cantidad
+        else:
+            carrito[prod_id_str] = cantidad
+
+        request.session["carrito"] = carrito
+        return redirect("ver_carrito")
+
 
 
 # --- Ver carrito ---
@@ -59,7 +65,7 @@ def ver_carrito(request):
 
     for prod_id, qty in cart.items():
         try:
-            p = Producto.objects.get(producto_id=prod_id)
+            p = Producto.objects.get(producto_id=int (prod_id))
             p.cant_en_carrito = qty
             p.subtotal = p.precio * qty
             total += p.subtotal
@@ -79,7 +85,7 @@ def eliminar_del_carrito(request):
         productos_a_eliminar = request.POST.getlist("productos_a_eliminar")
         if productos_a_eliminar:
             for prod_id in productos_a_eliminar:
-                carrito.pop(prod_id, None)          # quita el ítem del dict
+                carrito.pop(str(prod_id), None)          # quita el ítem del dict
             request.session["carrito"] = carrito     # guarda el carrito limpio
             mensaje = "Producto(s) eliminado(s) del carrito."
     # Re-construir los datos que el template necesita
