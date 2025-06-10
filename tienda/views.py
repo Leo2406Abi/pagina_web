@@ -13,22 +13,23 @@ def detalle_producto(request):
 
 # --- Añadir al carrito ---
 def agregar_carrito(request):
-    if request.method == 'POST':
-        prod_id = request.POST.get('producto_id')
-        qty     = int(request.POST.get('cantidad', 1))
+    if request.method == "POST":
+        producto_id = request.POST.get("producto_id")
+        cantidad = int(request.POST.get("cantidad", 1))
 
         try:
-            producto = Producto.objects.get(producto_id=prod_id)
+            producto = Producto.objects.get(pk=producto_id)
         except Producto.DoesNotExist:
-            messages.error(request, 'Producto no encontrado.')
+            from django.contrib import messages
+            messages.error(request, "Producto no encontrado.")
             return redirect('pagina_tienda')
 
-        # Carrito en sesión
-        cart = request.session.get('cart', {})
-        cart[str(prod_id)] = cart.get(str(prod_id), 0) + qty
-        request.session['cart'] = cart
-        messages.success(request, f'Añadido {qty} × {producto.nombre} al carrito.')
-    return redirect('pagina_tienda')
+        carrito = request.session.get("carrito", {})
+        carrito[str(producto_id)] = carrito.get(str(producto_id), 0) + cantidad
+        request.session["carrito"] = carrito
+
+    return redirect("pagina_tienda")
+
 
 # --- Ver carrito ---
 def ver_carrito(request):
