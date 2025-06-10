@@ -83,7 +83,7 @@ def eliminar_del_carrito(request):
 
         request.session["carrito"] = carrito
 
-    return redirect("carrito")
+    return redirect("ver_carrito")
 
 def checkout(request):
     return render(request, 'tienda/checkout.html')
