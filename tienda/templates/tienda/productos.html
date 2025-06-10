@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
     {% load static %}
@@ -6,47 +7,45 @@
     <title>Lista de productos disponibles</title>
 
     <style>
-        body      { font-family: Arial, sans-serif; background-color: #e7f1f8; margin: 0; padding: 0; }
-        h1        { text-align: center; }
-        table     { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        th, td    { border: 1px solid #ccc; padding: 10px; text-align: left; }
-        th        { background-color: #0077cc; color: #fff; }
-        img       { display: block; max-width: 100px; height: auto; }
-        .volver   { text-align: center; margin: 20px; }
-        a.button  { padding: 8px 16px; background:#0077cc; color:#fff; border-radius:6px; text-decoration:none; }
-        a.button:hover { background:#005fa3; }
+        body      { font-family: Arial, sans-serif; background:#e7f1f8; margin:0; padding:0; }
+        h1        { text-align:center; }
+        table     { width:100%; border-collapse:collapse; margin:20px 0; }
+        th, td    { border:1px solid #ccc; padding:10px; text-align:left; }
+        th        { background:#0077cc; color:#fff; }
+        img       { display:block; max-width:100px; height:auto; }
+        .volver   { text-align:center; margin:20px; }
+        a.button,
+        button    { padding:8px 16px; background:#0077cc; color:#fff; border:none; border-radius:6px; text-decoration:none; cursor:pointer; }
+        a.button:hover,
+        button:hover { background:#005fa3; }
+        /* ---- Carrito ---- */
+        #carrito-box { background:#fff; border:1px solid #ccc; border-radius:8px; padding:20px; max-width:500px; margin:30px auto; }
+        #carrito-box h2 { margin-top:0; text-align:center; }
+        .qty-controls { display:flex; gap:8px; justify-content:center; margin-bottom:10px; }
+        .qty-controls input { width:60px; text-align:center; }
     </style>
 </head>
 
 <body>
-<header>
-    <h1>Productos disponibles</h1>
-</header>
+<header><h1>Productos disponibles</h1></header>
 
 <main>
+    <!-- Tabla de productos -->
     <table>
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Imagen</th>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Precio</th>
-                <th>Stock</th>
-                <th>Categoría</th>
+                <th>ID</th><th>Imagen</th><th>Nombre</th><th>Descripción</th>
+                <th>Precio</th><th>Stock</th><th>Categoría</th>
             </tr>
         </thead>
-
         <tbody>
             {% for p in productos %}
             <tr>
                 <td>{{ p.producto_id }}</td>
                 <td>
                     {% if p.imagen %}
-                        <img src="/{{ p.imagen }}" alt="Imagen de {{ p.nombre }}" width="100">
-                    {% else %}
-                        Sin imagen
-                    {% endif %}
+                        <img src="/{{ p.imagen }}" alt="Imagen de {{ p.nombre }}">
+                    {% else %}<em>Sin imagen</em>{% endif %}
                 </td>
                 <td>{{ p.nombre }}</td>
                 <td>{{ p.descripción }}</td>
@@ -55,21 +54,59 @@
                 <td>{{ p.categoria.nombre }}</td>
             </tr>
             {% empty %}
-            <tr>
-                <td colspan="7" style="text-align:center;">No hay productos registrados.</td>
-            </tr>
+            <tr><td colspan="7" style="text-align:center;">No hay productos registrados.</td></tr>
             {% endfor %}
         </tbody>
     </table>
+
     {% if productos %}
         <p style="text-align:center;">Total de productos: {{ productos|length }}</p>
     {% endif %}
-    <br>
+
+    <!-- Sección Carrito -->
+    <div id="carrito-box">
+        <h2>Añadir al carrito</h2>
+
+        <form method="post" action="{% url 'agregar_carrito' %}">
+            {% csrf_token %}
+
+            <label for="producto_id">ID de producto:</label>
+            <input type="number" id="producto_id" name="producto_id" required min="1">
+
+            <div class="qty-controls">
+                <button type="button" id="btn-menos">−</button>
+                <input type="number" id="cant" name="cantidad" value="1" min="1">
+                <button type="button" id="btn-mas">＋</button>
+            </div>
+
+            <button type="submit">Agregar al carrito</button>
+            <button type="reset" style="background:#888;">Borrar selección</button>
+        </form>
+
+        <br>
+        <div style="text-align:center;">
+            <a href="{% url 'ver_carrito' %}" class="button">Listo (ir al carrito)</a>
+        </div>
+    </div>
+    <!-- Botón volver -->
     <div class="volver">
-        {# Ajusta el nombre de la URL a la que Sí exista en tu urls.py -- por ejemplo 'usuario_perfil' #}
         <a href="{% url 'perfil' %}" class="button">Volver a mi perfil</a>
     </div>
-
 </main>
+
+<script>
+/* Controles + y -  */
+const menos = document.getElementById('btn-menos');
+const mas   = document.getElementById('btn-mas');
+const qty   = document.getElementById('cant');
+
+menos.addEventListener('click', () => {
+    if (qty.value > 1) qty.value--;
+});
+mas.addEventListener('click', () => {
+    qty.value++;
+});
+</script>
 </body>
 </html>
+
