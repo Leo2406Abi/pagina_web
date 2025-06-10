@@ -73,16 +73,36 @@ def ver_carrito(request):
     })
 
 def eliminar_del_carrito(request):
+    mensaje = ""
     if request.method == "POST":
         productos_a_eliminar = request.POST.getlist("productos_a_eliminar")
         carrito = request.session.get("carrito", {})
 
-        for prod_id in productos_a_eliminar:
-            carrito.pop(prod_id, None)
+        if productos_a_eliminar:
+            for prod_id in productos_a_eliminar:
+                carrito.pop(prod_id, None)
+            request.session["carrito"] = carrito
+            mensaje = "Producto(s) eliminado(s) del carrito."
+    
+    # Reconstruir el carrito con datos actualizados
+    productos = []
+    total = 0
+    for prod_id, cantidad in carrito.items():
+        try:
+            producto = Producto.objects.get(producto_id=prod_id)
+            subtotal = producto.precio * cantidad
+            productos.append({
+                "producto_id": producto.producto_id,
+                "nombre": producto.nombre,
+                "precio": producto.precio,
+                "cant_en_carrito": cantidad,
+                "subtotal": subtotal,
+            })
+            total += subtotal
+        except Producto.DoesNotExist:
+            continue
 
-        request.session["carrito"] = carrito
-
-    return redirect("ver_carrito")
+    return render(request, "carrito.html", {"productos": productos, "total": total, "mensaje": mensaje})
 
 def checkout(request):
     return render(request, 'tienda/checkout.html')
