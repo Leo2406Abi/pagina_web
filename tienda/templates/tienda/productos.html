@@ -43,7 +43,7 @@
                 <td>{{ p.producto_id }}</td>
                 <td>
                     {% if p.imagen %}
-                        <img src="{% static p.imagen %}" alt="Imagen de {{ p.nombre }}" width="100">
+                        <img src="/{{ p.imagen }}" alt="Imagen de {{ p.nombre }}" width="100">
                     {% else %}
                         Sin imagen
                     {% endif %}
