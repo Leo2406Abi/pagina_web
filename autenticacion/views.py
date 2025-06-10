@@ -135,6 +135,3 @@ def recover_password_view(request):
             messages.error(request, "El correo no se encuentra registrado.")
 
     return render(request, "autenticacion/recover_password.html")
-
-def pagina_tienda(request):
-    return render(request, 'tienda/productos.html')
