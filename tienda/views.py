@@ -72,19 +72,23 @@ def ver_carrito(request):
         'total': total
     })
 
+from django.shortcuts import render
+from .models import Producto
+
 def eliminar_del_carrito(request):
+    carrito = request.session.get("carrito", {})
     mensaje = ""
+
     if request.method == "POST":
         productos_a_eliminar = request.POST.getlist("productos_a_eliminar")
-        carrito = request.session.get("carrito", {})
 
         if productos_a_eliminar:
             for prod_id in productos_a_eliminar:
                 carrito.pop(prod_id, None)
             request.session["carrito"] = carrito
             mensaje = "Producto(s) eliminado(s) del carrito."
-    
-    # Reconstruir el carrito con datos actualizados
+
+    # Reconstruir productos del carrito actual
     productos = []
     total = 0
     for prod_id, cantidad in carrito.items():
