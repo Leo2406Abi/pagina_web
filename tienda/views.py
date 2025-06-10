@@ -1,5 +1,5 @@
 from django.db import connection
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from tienda.models import Producto
 from django.contrib import messages
 
